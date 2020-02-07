@@ -1,1 +1,11 @@
-<p>signup works!</p>
+<section class="signup-form">
+  <form [formGroup]="form" fxLayout="column" fxLayoutAlign="center center">
+    <mat-form-field>
+      <input formControlName="email" type="email" matInput placeholder="Your email">
+    </mat-form-field>
+    <mat-form-field>
+      <input formControlName="password" type="password" matInput placeholder="Your password">
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="primary">Submit</button>
+  </form>
+</section>
