@@ -1,5 +1,5 @@
 <section class="login-form">
-  <form [formGroup]="form" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+  <form [formGroup]="form" (ngSubmit)="submit(form)" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
     <mat-form-field>
       <input formControlName="email" type="email" matInput placeholder="Your email">
       <mat-error *ngIf="form.get('email').hasError('required')">This field is required</mat-error>
