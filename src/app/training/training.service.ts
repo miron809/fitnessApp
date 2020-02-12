@@ -22,4 +22,8 @@ export class TrainingService {
     this.runningExercise = this.availableExercises.find(exercise => exercise.id === selectedId);
     this.exerciseChanged$.next({ ...this.runningExercise });
   }
+
+  getRunnigExercise() {
+    return { ...this.runningExercise };
+  }
 }
