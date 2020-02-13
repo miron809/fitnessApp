@@ -8,9 +8,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class TrainingService {
   exerciseChanged$ = new Subject<Exercise>();
   exercisesChanged$ = new Subject<Exercise[]>();
+  finishedExercisesChanged$ = new Subject<Exercise[]>();
   availableExercises: Exercise[] = [];
   private runningExercise: Exercise;
-  private exercises: Exercise[] = [];
 
   constructor(private db: AngularFirestore) {}
 
@@ -39,7 +39,7 @@ export class TrainingService {
   }
 
   completeExercise() {
-    this.exercises.push({
+    this.addDataToDatabase({
       ...this.runningExercise,
       date: new Date(),
       state: 'completed'
@@ -49,7 +49,7 @@ export class TrainingService {
   }
 
   cancelExercise(progress: number) {
-    this.exercises.push({
+    this.addDataToDatabase({
       ...this.runningExercise,
       duration: this.runningExercise.duration * (progress / 100),
       calories: this.runningExercise.calories * (progress / 100),
@@ -65,6 +65,13 @@ export class TrainingService {
   }
 
   getCompletedOrCanceledExercises() {
-    return this.exercises.slice();
+    this.db.collection('finishedExercises').valueChanges()
+      .subscribe((exercises: Exercise[]) => {
+        this.finishedExercisesChanged$.next(exercises);
+      });
+  }
+
+  private addDataToDatabase(exercise: Exercise) {
+    this.db.collection('finishedExercises').add(exercise);
   }
 }
