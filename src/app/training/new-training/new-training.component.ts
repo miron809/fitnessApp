@@ -1,27 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { TrainingService } from '../training.service';
-import { map } from 'rxjs/operators';
 import { Exercise } from '../exercise.model';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-training',
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.scss']
 })
-export class NewTrainingComponent implements OnInit {
+export class NewTrainingComponent implements OnInit, OnDestroy {
+  unsubscriber = new Subject<void>();
   form: FormGroup;
-  exercises: Observable<Exercise[]>;
+  exercises: Exercise[];
 
-  constructor(private trainingService: TrainingService,
-              private db: AngularFirestore) {
+  constructor(private trainingService: TrainingService) {
   }
 
   ngOnInit() {
-    this.getAllExercises();
+    this.trainingService.getAllAvailableExercises();
+    this.trainingService.exercisesChanged$
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe(exercises => this.exercises = exercises);
     this.buildForm();
   }
 
@@ -31,22 +33,12 @@ export class NewTrainingComponent implements OnInit {
     });
   }
 
-  getAllExercises() {
-    this.exercises = this.db.collection('availableExercises')
-      .snapshotChanges()
-      .pipe(map(docArray => {
-        return docArray.map( doc => {
-          return {
-            id: doc.payload.doc.id,
-            name: doc.payload.doc.data()['name'],
-            duration: doc.payload.doc.data()['duration'],
-            calories: doc.payload.doc.data()['calories']
-          };
-        });
-      }));
-  }
-
   onStartTraining({value}) {
     this.trainingService.startExercise(value.exercise);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscriber.next();
+    this.unsubscriber.complete();
   }
 }
