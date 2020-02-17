@@ -17,7 +17,8 @@
         </div>
       </mat-error>
     </mat-form-field>
-    <button [disabled]="form.invalid" type="submit" mat-raised-button color="primary">Submit</button>
+    <button *ngIf="!isLoading" [disabled]="form.invalid" type="submit" mat-raised-button color="primary">Submit</button>
+    <mat-spinner diameter="40" *ngIf="isLoading"></mat-spinner>
   </form>
 </section>
 

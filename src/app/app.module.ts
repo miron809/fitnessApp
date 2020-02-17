@@ -23,6 +23,7 @@ import { StopTrainingDialogComponent } from './training/stop-training-dialog.com
 
 import { AuthService } from './auth/auth.service';
 import { TrainingService } from './training/training.service';
+import { UIService } from './shared/ui.service';
 
 import { environment } from '../environments/environment';
 
@@ -52,7 +53,7 @@ import { environment } from '../environments/environment';
     AngularFirestoreModule,
     AngularFireAuthModule
   ],
-  providers: [AuthService, TrainingService],
+  providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent],
   entryComponents: [StopTrainingDialogComponent]
 })
