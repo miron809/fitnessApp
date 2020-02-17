@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { TrainingService } from '../training.service';
 import { Exercise } from '../exercise.model';
 import { takeUntil } from 'rxjs/operators';
+import { UIService } from '../../shared/ui.service';
 
 @Component({
   selector: 'app-new-training',
@@ -15,11 +16,16 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   unsubscriber = new Subject<void>();
   form: FormGroup;
   exercises: Exercise[];
+  isLoading = false;
 
-  constructor(private trainingService: TrainingService) {
+  constructor(private trainingService: TrainingService,
+              private uiService: UIService) {
   }
 
   ngOnInit() {
+    this.uiService.loadingStateChanged$
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe(isLoading => this.isLoading = isLoading);
     this.trainingService.getAllAvailableExercises();
     this.trainingService.exercisesChanged$
       .pipe(takeUntil(this.unsubscriber))
