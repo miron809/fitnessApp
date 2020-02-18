@@ -2,10 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { SignupComponent } from './signup/signup.component';
-import { LoginComponent } from './login/login.component';
 
+import { LoginComponent } from './login/login.component';
 import { MaterialModule } from '../material.module';
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MaterialModule } from '../material.module';
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    AngularFireAuthModule,
   ],
   exports: []
   }
