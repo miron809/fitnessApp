@@ -26,10 +26,13 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     this.uiService.loadingStateChanged$
       .pipe(takeUntil(this.unsubscriber))
       .subscribe(isLoading => this.isLoading = isLoading);
-    this.trainingService.getAllAvailableExercises();
+
+    this.getAllAvailableExercises();
+
     this.trainingService.exercisesChanged$
       .pipe(takeUntil(this.unsubscriber))
       .subscribe(exercises => this.exercises = exercises);
+
     this.buildForm();
   }
 
@@ -37,6 +40,10 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       exercise: new FormControl(null, [Validators.required])
     });
+  }
+
+  getAllAvailableExercises() {
+    this.trainingService.getAllAvailableExercises();
   }
 
   onStartTraining({value}) {
