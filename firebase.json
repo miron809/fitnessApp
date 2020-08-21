@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "dist/fitnessApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
